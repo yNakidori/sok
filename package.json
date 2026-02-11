@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "electron": "electron .",
-    "electron:dev": "wait-on tcp:5173 && electron .",
+    "electron:dev": "wait-on tcp:5173 && electron . --dev-server-url=http://localhost:5173",
     "start": "concurrently -k \"npm:dev\" \"npm:electron:dev\"",
     "build": "vite build",
     "electron:preview": "npm run build && electron .",
