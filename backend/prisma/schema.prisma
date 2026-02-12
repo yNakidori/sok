@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  DRAFT
+  IN_SEPARATION
+  SEPARATED
+  READY_TO_INVOICE
+  INVOICED
+  CANCELLED
+}
+
+enum MovementType {
+  IN
+  OUT
+  RESERVE
+  RELEASE
+  TRANSFER
+}
+
+enum ReservationStatus {
+  ACTIVE
+  CONSUMED
+  CANCELLED
+}
+
+model Company {
+  id       String  @id @default(uuid())
+  name     String
+  cnpj     String?
+  isMatrix Boolean @default(false)
+
+  parentCompanyId String?
+  parentCompany   Company?  @relation("CompanyHierarchy", fields: [parentCompanyId], references: [id])
+  subsidiaries    Company[] @relation("CompanyHierarchy")
+
+  users      User[]
+  warehouses Warehouse[]
+  orders     Order[]
+
+  inventoryMovements InventoryMovement[]
+  reservations       InventoryReservation[]
+
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  ordersCreated      Order[]
+  inventoryMovements InventoryMovement[]
+
+  createdAt DateTime @default(now())
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String
+
+  users User[]
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  sku         String  @unique
+  description String?
+  barcode     String?
+
+  orderItems         OrderItem[]
+  inventoryMovements InventoryMovement[]
+  reservations       InventoryReservation[]
+
+  createdAt DateTime @default(now())
+}
+
+model Warehouse {
+  id   String @id @default(uuid())
+  name String
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  locations Location[]
+
+  createdAt DateTime @default(now())
+}
+
+model Location {
+  id     String  @id @default(uuid())
+  code   String
+  street String?
+  shelf  String?
+  level  String?
+
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id])
+
+  inventoryMovements InventoryMovement[]
+  reservations       InventoryReservation[]
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id      String      @id @default(uuid())
+  status  OrderStatus @default(DRAFT)
+  version Int         @default(1)
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  items        OrderItem[]
+  reservations InventoryReservation[]
+  movements    InventoryMovement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id                String  @id @default(uuid())
+  quantity          Decimal
+  separatedQuantity Decimal @default(0)
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model InventoryMovement {
+  id       String       @id @default(uuid())
+  type     MovementType
+  quantity Decimal
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
+  orderId String?
+  order   Order?  @relation(fields: [orderId], references: [id])
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model InventoryReservation {
+  id       String            @id @default(uuid())
+  quantity Decimal
+  status   ReservationStatus @default(ACTIVE)
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
+  createdAt DateTime @default(now())
+}
