@@ -8,7 +8,7 @@ import {
 
 export const sidebarItems = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     path: '/app/home',
     icon: HomeIcon
   },

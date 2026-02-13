@@ -55,7 +55,7 @@ const Login = () => {
             color="primary"
             gutterBottom
           >
-            SOK
+            SISIFO
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Sistema de Controle de Estoque

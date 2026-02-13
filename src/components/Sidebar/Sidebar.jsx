@@ -28,10 +28,10 @@ const Sidebar = () => {
     >
       <Box sx={{ p: 3, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Typography variant="h6" fontWeight="bold" color="primary">
-          SOK
+          SISIFO
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Sistema de Estoque
+          Gerencie seu estoque
         </Typography>
       </Box>
 
