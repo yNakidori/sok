@@ -9,6 +9,7 @@ import Produtos from "../pages/Produtos/Produtos";
 import Pedidos from "../pages/Pedidos/Pedidos";
 import Unidades from "../pages/Unidades/Unidades";
 import Login from "../pages/Login/Login";
+import Operadores from "../pages/Operadores/Operadores";
 
 const RootRedirect = () => {
   const { isAuthenticated } = useAuth();
@@ -39,6 +40,7 @@ const AppRoutes = () => {
           <Route path="produtos" element={<Produtos />} />
           <Route path="pedidos" element={<Pedidos />} />
           <Route path="unidades" element={<Unidades />} />
+          <Route path="operadores" element={<Operadores />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

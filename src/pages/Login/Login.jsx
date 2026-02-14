@@ -20,6 +20,7 @@ import {
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({
     username: "",
@@ -35,14 +36,21 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Login simples (implementar validação real futuramente)
-    if (credentials.username && credentials.password) {
-      login({
-        username: credentials.username,
-        name: credentials.username,
-      });
-      navigate("/app/home");
-    }
+
+    if (!credentials.username || !credentials.password) return;
+
+    /**
+     * MOCK DE LOGIN (sem backend)
+     * username = email
+     */
+    login({
+      username: credentials.username,          // usado internamente
+      email: credentials.username,             // email real
+      name: "Lucca",                            // nome real (editável depois)
+      roles: ["ADMIN", "OPERATOR"],             // cargos
+    });
+
+    navigate("/app/home");
   };
 
   return (
@@ -66,10 +74,11 @@ const Login = () => {
           <TextField
             fullWidth
             name="username"
-            label="Usuário"
+            label="Email"
             value={credentials.username}
             onChange={handleChange}
             margin="normal"
+            autoComplete="username"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -87,6 +96,7 @@ const Login = () => {
             value={credentials.password}
             onChange={handleChange}
             margin="normal"
+            autoComplete="current-password"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

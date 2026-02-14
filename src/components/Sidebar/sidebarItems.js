@@ -3,7 +3,8 @@ import {
   Inventory as InventoryIcon,
   Category as CategoryIcon,
   ShoppingCart as OrderIcon,
-  Store as StoreIcon
+  Store as StoreIcon,
+  People as PeopleIcon
 } from '@mui/icons-material';
 
 export const sidebarItems = [
@@ -31,5 +32,11 @@ export const sidebarItems = [
     title: 'Unidades',
     path: '/app/unidades',
     icon: StoreIcon
-  }
+  },
+  {
+    title: 'Operadores',
+    path: '/app/operadores',
+    icon: PeopleIcon
+  },
+  
 ];

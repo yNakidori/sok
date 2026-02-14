@@ -23,6 +23,18 @@ import {
 
 const DRAWER_WIDTH = 240;
 
+// Helper pra traduzir cargo
+const getRoleLabel = (role) => {
+  switch (role) {
+    case "supervisor":
+      return "Administrador";
+    case "operador":
+      return "Operador";
+    default:
+      return "Usuário";
+  }
+};
+
 const Topbar = ({
   toggleTheme,
   isDarkMode,
@@ -72,7 +84,7 @@ const Topbar = ({
 
         {/* AÇÕES DA TOPBAR */}
         <Box display="flex" alignItems="center" gap={1}>
-          {/* SOBRE NÓS */}
+          {/* SOBRE */}
           <Tooltip title="Sobre o SISIFO">
             <IconButton onClick={onOpenAbout} color="inherit">
               <InfoIcon />
@@ -84,7 +96,7 @@ const Topbar = ({
             {isDarkMode ? <LightIcon /> : <DarkIcon />}
           </IconButton>
 
-          {/* MENU USUÁRIO */}
+          {/* USUÁRIO */}
           <IconButton onClick={handleMenuOpen} color="inherit">
             <AccountIcon />
           </IconButton>
@@ -103,7 +115,7 @@ const Topbar = ({
               {user?.name || "Usuário"}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              {user?.username}
+              {getRoleLabel(user?.role)}
             </Typography>
           </Box>
 
