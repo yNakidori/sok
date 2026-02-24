@@ -10,6 +10,7 @@ import Pedidos from "../pages/Pedidos/Pedidos";
 import Unidades from "../pages/Unidades/Unidades";
 import Login from "../pages/Login/Login";
 import Operadores from "../pages/Operadores/Operadores";
+import Registro from "../pages/Registro/Registro";
 
 const RootRedirect = () => {
   const { isAuthenticated } = useAuth();
@@ -22,9 +23,13 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<RootRedirect />} />
 
+        {/* Rotas de autenticação (layout para login) */}
         <Route path="/" element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
         </Route>
+
+        {/* Rota pública de registro (não protegida) */}
+        <Route path="/registro" element={<Registro />} />
 
         <Route
           path="/app"

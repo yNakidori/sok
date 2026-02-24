@@ -28,6 +28,23 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
+  const register = async (payload) => {
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+    const res = await fetch(`${API_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data?.error || 'Registro falhou');
+    }
+    const data = await res.json();
+    // Optionally log in the user immediately
+    // login(data.user);
+    return data;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
@@ -37,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     logout,
+    register,
     isAuthenticated: !!user,
     loading,
   };
